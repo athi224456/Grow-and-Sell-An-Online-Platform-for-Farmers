@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block content %}<h1>Welcome, {{ g.user.name }}</h1>
+<p><a class="btn" href="{{ url_for('product_new') }}">+ List new product</a></p>
+<h2>My products</h2><div class="scroll"><table><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th></th></tr>
+{% for p in products %}<tr><td>{{ p.name }}</td><td>{{ p.category }}</td><td>₹{{ p.price }}/{{ p.unit }}</td><td>{{ p.quantity|round(1) }}</td><td>
+<a class="btn sec" href="{{ url_for('product_edit', pid=p.id) }}">Edit</a>
+<form class="inline" method="post" action="{{ url_for('product_delete', pid=p.id) }}" onsubmit="return confirm('Delete?')"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn red">Delete</button></form></td></tr>
+{% else %}<tr><td colspan="5">No products yet.</td></tr>{% endfor %}</table></div>
+<h2>Incoming orders</h2><div class="scroll"><table><tr><th>#</th><th>Product</th><th>Buyer</th><th>Qty</th><th>Total</th><th>Address</th><th>Status</th></tr>
+{% for o in orders %}<tr><td>{{ o.id }}</td><td>{{ o.product }}</td><td>{{ o.buyer }}<br><span class="muted">{{ o.phone }}</span></td><td>{{ o.quantity }} {{ o.unit }}</td><td>₹{{ o.total }}</td><td>{{ o.address }}</td>
+<td><form method="post" action="{{ url_for('order_status', oid=o.id) }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+<select name="status" onchange="this.form.submit()">{% for s in statuses %}<option {{ 'selected' if s==o.status }}>{{ s }}</option>{% endfor %}</select></form></td></tr>
+{% else %}<tr><td colspan="7">No orders yet.</td></tr>{% endfor %}</table></div>{% endblock %}
