@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block content %}
+<h1>Fresh from the farm</h1>
+<form class="search" method="get"><input name="q" value="{{ q }}" placeholder="Search produce or location">
+<select name="category"><option value="">All categories</option>{% for c in categories %}<option {{ 'selected' if c==cat }}>{{ c }}</option>{% endfor %}</select>
+<button class="btn">Search</button></form>
+<div class="grid">{% for p in products %}<div class="card"><span class="tag">{{ p.category }}</span>
+<h3>{{ p.name }}</h3><div class="price">₹{{ '%.2f'|format(p.price) }} / {{ p.unit }}</div>
+<div class="muted">{{ p.farmer }} · {{ p.location or 'N/A' }}<br>{{ p.quantity|round(1) }} {{ p.unit }} available</div><br>
+<a class="btn sec" href="{{ url_for('product_detail', pid=p.id) }}">View</a></div>
+{% else %}<p>No products found.</p>{% endfor %}</div>{% endblock %}
