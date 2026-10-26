@@ -1,0 +1,22 @@
+"""Optional demo data: python seed.py  (farmer@demo.com / buyer@demo.com, password: demo123)"""
+import sqlite3
+from werkzeug.security import generate_password_hash
+from app import init_db, DB
+
+init_db()
+c = sqlite3.connect(DB)
+pw = generate_password_hash("demo123")
+c.execute("INSERT OR IGNORE INTO users(name,email,password_hash,role,phone,location) VALUES('Ravi Kumar','farmer@demo.com',?,'farmer','9876543210','Coimbatore')", (pw,))
+c.execute("INSERT OR IGNORE INTO users(name,email,password_hash,role,phone,location) VALUES('Asha Stores','buyer@demo.com',?,'buyer','9123456780','Chennai')", (pw,))
+fid = c.execute("SELECT id FROM users WHERE email='farmer@demo.com'").fetchone()[0]
+if not c.execute("SELECT 1 FROM products").fetchone():
+    for n, cat, pr, u, q, d in [
+        ("Tomatoes", "Vegetables", 30, "kg", 200, "Fresh farm tomatoes, harvested this week."),
+        ("Bananas", "Fruits", 45, "dozen", 80, "Naturally ripened Robusta bananas."),
+        ("Ponni Rice", "Grains", 58, "kg", 500, "Unpolished, farm-milled."),
+        ("Turmeric", "Spices", 120, "kg", 60, "Sun-dried turmeric fingers."),
+    ]:
+        c.execute("INSERT INTO products(farmer_id,name,category,price,unit,quantity,description) VALUES(?,?,?,?,?,?,?)",
+                  (fid, n, cat, pr, u, q, d))
+c.commit()
+print("Seeded demo data.")
