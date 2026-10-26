@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Grow and Sell{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head><body>
+<nav><a class="brand" href="{{ url_for('index') }}">🌾 Grow and Sell</a>
+<a href="{{ url_for('index') }}">Marketplace</a>
+{% if g.user %}<a href="{{ url_for('dashboard') }}">Dashboard ({{ g.user.role }})</a>
+<form class="inline" method="post" action="{{ url_for('logout') }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button>Logout</button></form>
+{% else %}<a href="{{ url_for('login') }}">Login</a><a href="{{ url_for('register') }}">Register</a>{% endif %}</nav>
+<main>{% for m in get_flashed_messages(with_categories=true) %}<div class="flash {{ m[0] }}">{{ m[1] }}</div>{% endfor %}
+{% block content %}{% endblock %}</main></body></html>
