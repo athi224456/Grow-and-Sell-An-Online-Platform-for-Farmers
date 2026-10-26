@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block content %}<h1>{{ 'Edit' if p else 'List a' }} product</h1>
+<form class="stack" method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+<input name="name" placeholder="Product name" value="{{ p.name if p }}" required>
+<select name="category">{% for c in categories %}<option {{ 'selected' if p and p.category==c }}>{{ c }}</option>{% endfor %}</select>
+<input type="number" step="0.01" min="0.01" name="price" placeholder="Price (₹)" value="{{ p.price if p }}" required>
+<input name="unit" placeholder="Unit (kg, dozen...)" value="{{ p.unit if p else 'kg' }}">
+<input type="number" step="0.1" min="0" name="quantity" placeholder="Quantity available" value="{{ p.quantity if p }}" required>
+<textarea name="description" placeholder="Description">{{ p.description if p and p.description }}</textarea>
+<button class="btn">Save</button></form>{% endblock %}
