@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}<h1>My orders</h1>
+<div class="scroll"><table><tr><th>#</th><th>Product</th><th>Farmer</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th></tr>
+{% for o in orders %}<tr><td>{{ o.id }}</td><td>{{ o.product }}</td><td>{{ o.farmer }}</td><td>{{ o.quantity }} {{ o.unit }}</td><td>₹{{ o.total }}</td><td>{{ o.status }}</td><td>{{ o.created_at }}</td></tr>
+{% else %}<tr><td colspan="7">No orders yet. <a href="{{ url_for('index') }}">Browse the marketplace</a>.</td></tr>{% endfor %}</table></div>{% endblock %}
